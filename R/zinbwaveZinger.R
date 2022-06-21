@@ -185,7 +185,23 @@ getDatasetMoMPositive <- function(counts,
 }
 
 
-
+#' Simulate a scRNA-seq experiment
+#'
+#' This function simulates a count matrix for a scRNA-seq experiment based on parameters estimated from a real scRNA-seq count matrix. Global patterns of zero abundance as well as feature-specific mean-variance relationships are retained in the simulation.
+#'
+#' @param dataset An expression matrix representing the dataset on which the simulation is based.
+#' @param group Group indicator specifying the attribution of the samples to the different conditions of interest that are being simulated.
+#' @param nTags The number of features (genes) to simulate. $1000$ by default
+#' @param nlibs The number of samples to simulate. Defaults to \code{length(group)}.
+#' @param lib.size The library sizes for the simulated samples. If \code{NULL} (default), library sizes are resampled from the original datset.
+#' @param pUp Numeric value between $0$ and $1$ ($0.5$ by default) specifying the proportion of differentially expressed genes that show an upregulation in the second condition.
+#' @param foldDiff The fold changes used in simulating the differentially expressed genes. Either one numeric value for specifying the same fold change for all DE genes, or a vector of the same length as \code{ind} to specify fold changes for all differentially expressed genes. Note that fold changes above $1$ should be used as input of which a fraction will be inversed (i.e. simulation downregulation) according to `pUp`. Defaults to $3$.
+#' @param verbose Logical, stating whether progress be printed.
+#' @param ind Integer vector specifying the rows of the count matrix that represent differential features.
+#' @param params An object containing feature-wise parameters used for simulation as created by \code{\link[zinbwaveZingercollected]{getDatasetMoMPositive}}. If \code{NULL}, parameters are estimated from the dataset provided.
+#' @param min.dispersion The minimum dispersion value to use for simulation. $0.1$ by default.
+#' @param max.dipserion The maximum dispersion value to use for simulation. $400$ by default.
+#' @param drop.extreme.dispersion Only applicable if \code{params=NULL} and used as input to \code{\link[zinbwaveZingercollected]{getDatasetMoMPositive}}. Numeric value between $0$ and $1$ specifying the fraction of highest dispersion values to remove after estimating feature-wise parameters.
 #' @export
 NBsimSingleCell_zinbwaveZinger <- function(
     dataset,
