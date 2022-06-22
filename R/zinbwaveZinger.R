@@ -3,7 +3,7 @@ reEstimateExprFraction4 <- function(counts,
                                     offset,
                                     lambda,
                                     phi){
-  countsModel <- ounts[counts>0]
+  countsModel <- counts[counts>0]
   offsetModel <- offset[counts>0]
   mu <- lambda*offsetModel
   sum(countsModel*(1-dnbinom(0, mu = mu, size=1/phi)))/sum(offsetModel)
@@ -56,7 +56,7 @@ getDatasetMoMPositive <- function(counts,
                                   MoMIter = 10){
 
   #### estimate lambda and overdispersion based on ZTNB.
-  d <- DGEList(counts)
+  d <- edgeR::DGEList(counts)
   #cp <- cpm(d,normalized.lib.sizes=TRUE)
   dFiltered <- d
   dFiltered <- edgeR::calcNormFactors(dFiltered)
@@ -101,7 +101,7 @@ getDatasetMoMPositive <- function(counts,
 
   ### estimate logistic GAM P(zero) ~ s(aveLogCPM)*logLibSize
   ### use unfiltered data for this model.
-  require(mgcv)
+  suppressPackageStartupMessages(require(mgcv))
   propZero <- colMeans(counts == 0)
   propZeroGene <- rowMeans(counts == 0)
   d <- edgeR::DGEList(counts)
@@ -203,25 +203,25 @@ getDatasetMoMPositive <- function(counts,
 #' @param max.dipserion The maximum dispersion value to use for simulation. $400$ by default.
 #' @param drop.extreme.dispersion Only applicable if \code{params=NULL} and used as input to \code{\link[zinbwaveZingercollected]{getDatasetMoMPositive}}. Numeric value between $0$ and $1$ specifying the fraction of highest dispersion values to remove after estimating feature-wise parameters.
 #' @export
-NBsimSingleCell_zinbwaveZinger <- function(
+NBsimSingleCell <- function(
     dataset,
     group,
     nTags = 10000,
     nlibs = length(group),
     lib.size = NULL,
-    drop.low.lambda = TRUE,
     drop.extreme.dispersion = 0.1,
     pUp = .5,
     foldDiff = 3,
     verbose = TRUE,
     ind = NULL,
     params = NULL,
-    cpm="AveLogCPM",
+    cpm = "AveLogCPM",
     max.dispersion = 400,
     min.dispersion = 0.1,
-    normalizeLambda = FALSE
+    normalizeLambda = FALSE,
+    drop.low.lambda = TRUE
 ){
-  require(edgeR)
+  suppressPackageStartupMessages(require(edgeR))
   group <- as.factor(group)
   expit <- function(x) exp(x)/(1+exp(x))
   logit <- function(x) log(x/(1-x))
