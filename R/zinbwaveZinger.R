@@ -203,7 +203,7 @@ getDatasetMoMPositive <- function(counts,
 #' @param max.dipserion The maximum dispersion value to use for simulation. $400$ by default.
 #' @param drop.extreme.dispersion Only applicable if \code{params=NULL} and used as input to \code{\link[zinbwaveZingercollected]{getDatasetMoMPositive}}. Numeric value between $0$ and $1$ specifying the fraction of highest dispersion values to remove after estimating feature-wise parameters.
 #' @export
-NBsimSingleCell <- function(
+NBsimSingleCell_zinbwaveZinger <- function(
     dataset,
     group,
     nTags = 10000,
